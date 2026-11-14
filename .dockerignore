@@ -1,0 +1,7 @@
+.venv
+**/node_modules
+frontend/dist
+scratch
+cache/cutouts
+**/__pycache__
+.git

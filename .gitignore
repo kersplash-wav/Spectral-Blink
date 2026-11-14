@@ -1,0 +1,15 @@
+.venv/
+node_modules/
+frontend/dist/
+scratch/
+cache/cutouts/
+__pycache__/
+*.pyc
+
+# keep only the five pre-computed demo fields (used by the Docker image)
+cache/jobs/*
+!cache/jobs/deb7d1c53a1dce1c.*
+!cache/jobs/90a0b91b8683e1e4.*
+!cache/jobs/c9fdd6dbc5fda353.*
+!cache/jobs/cc5e8e5abc55ea20.*
+!cache/jobs/a4916f4f08788c9f.*

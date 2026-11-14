@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+@theme {
+  --color-void: #05070c;
+  --color-panel: #0b0f18;
+  --color-panel-2: #111726;
+  --color-line: #1d2536;
+  --color-line-2: #2a3448;
+  --color-ink: #e7eaf1;
+  --color-muted: #8b94a8;
+  --color-faint: #5b6478;
+  --color-amber: #ffb547;
+  --color-cyan: #6ee7f9;
+  --color-rose: #ff6b81;
+  --color-d1: #8ea8ff;
+  --color-d2: #6ee7f9;
+  --color-d3: #7ef0a8;
+  --color-d4: #f2e46b;
+  --color-d5: #ffb547;
+  --color-d6: #ff7a6b;
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+html, body, #root { height: 100%; }
+body {
+  margin: 0;
+  background: var(--color-void);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+::selection { background: color-mix(in oklab, var(--color-amber) 40%, transparent); }
+
+.tabular { font-variant-numeric: tabular-nums; }
+
+/* thin scrollbars inside panels */
+.scroll-thin { scrollbar-width: thin; scrollbar-color: var(--color-line-2) transparent; }
+
+/* radix slider */
+.slider-root { position: relative; display: flex; align-items: center; user-select: none; touch-action: none; height: 18px; }
+.slider-track { position: relative; flex-grow: 1; height: 4px; border-radius: 999px; background: var(--color-line-2); }
+.slider-range { position: absolute; height: 100%; border-radius: 999px; background: var(--color-amber); }
+.slider-thumb {
+  display: block; width: 14px; height: 14px; border-radius: 999px; background: var(--color-ink);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-amber) 25%, transparent);
+  transition: box-shadow .15s ease, transform .15s ease;
+}
+.slider-thumb:hover { transform: scale(1.12); }
+.slider-thumb:focus-visible { outline: none; box-shadow: 0 0 0 6px color-mix(in oklab, var(--color-amber) 45%, transparent); }
+
+@keyframes sweep { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+.shimmer {
+  background: linear-gradient(90deg, var(--color-panel-2) 0%, var(--color-line-2) 50%, var(--color-panel-2) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
