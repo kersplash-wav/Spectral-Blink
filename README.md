@@ -2,33 +2,30 @@
 ![A promotional banner which says "Spectral Blink"](https://github.com/kersplash-wav/Spectral-Blink/blob/main/frontend/public/SpectralBlinkPromotionalBanner.png?raw-true)
 <p align="center">Developed by Ahmad Al Muzanen, Nico Ranin, Robert Rodriguez, Brandon Nevestuk, and Carl Asojo</p>
 
+## What our project does
+Spectral Blink allows anyone to watch the infrared sky change with NASA's SPHEREx. This project was designed for NASA Space Apps Challenge 2026: Planet X and SPHEREx.
 
-**Watch the infrared sky change with NASA's SPHEREx.**
-NASA Space Apps Challenge 2026: *Planet X and SPHEREx*.
+In this project, you can enter either any sky position (ex. `269.45, 4.69`, `08h55m10.8s -7d14m42s`) or a name (ex. `WISE 0855`). Spectral Blink then pulls every SPHEREx exposure of that patch from NASA/IRSA, aligns them, and plays the sky surveys as a smooth 'blink' animation. With this animation, moving things will visibly jump and changing things will visibly pulse. Given the fact that SPHEREx sees 102 infrared colours, it measures a spectrum for anything you click (allowing one to measure the brightness of that spot), as well as displaying where specific molecules are (which aids in the identification of specific celestial bodies).
 
-Enter any sky position (or a name like `WISE 0855`). Spectral Blink pulls every SPHEREx exposure of that patch from NASA/IRSA, aligns them, and plays the sky surveys as a smooth "blink" animation: **moving things jump, and changing things pulse.** Because SPHEREx sees 102 infrared colours, it also measures a **spectrum** for anything you click and can show where **molecules** are.
-
-## What it does
-| Feature | Why it matters |
+| Features | Why it exists |
 |---|---|
-| **Blink** each six-month all-sky survey (per detector or all bands combined) | Spot nearby stars, brown dwarfs and variable stars |
-| **Difference** mode (each survey minus the others) | Steady stars cancel; movers become blue/amber pairs |
-| **Molecule lens** (CH₄, H₂O, CO₂, CO) | Compares light in vs. out of a molecular band: ordinary stars vanish, methane brown dwarfs glow |
-| **Shift-and-stack** along any motion | Reveals objects too faint to see in one survey (e.g. WISE 0855) |
-| **Click → spectrum** (0.75–5 µm) built on the fly from ~100–450 exposures, with a molecular **fingerprint** and blackbody fit | ε Indi B is automatically labelled "strong methane: T/Y brown dwarf" |
-| **Brightness tab** compares surveys at matched wavelengths (with a PSF-halo method for saturated stars) | RW Aur (+46 %) and R Dra (Mira, ~73 %) flagged as variable; Barnard's Star steady |
-| **Gaia DR3 overlay** with positions moved to each survey date; fast movers drawn with their track | Validate motion; **"Not in Gaia"** flags red/cold candidates Gaia can't see |
-| Proper-motion-aware search | Catalogue positions are moved to now. Barnard's Star has moved 4.5′ since J2000 |
-| Shareable / embeddable URLs | `?target=eps%20Ind%20B&mode=molecule&mol=CH4`, add `&embed=1` for iframes |
-| Keyboard-driven, progressive loading | Frames stream in and sharpen; first blink in ~10 s on a cold field, instant when cached |
+| Blink each six-month all-sky survey (per detector, or all bands combined) | This spots nearby stars, brown dwarfs and variable stars |
+| Difference mode (each survey minus the others) | Steady stars will cancel out whilst moving objects become highly visible blue/amber pairs |
+| Molecule lens (CH₄, H₂O, CO₂, CO) | Compares light in vs. out of a molecular band: thus, ordinary stars vanish whilst methane brown dwarfs glow |
+| Shift-and-stack along any motion | Reveals objects too faint to see in just one survey (ex. WISE 0855) |
+| Click → spectrum (0.75–5 µm) with a molecular fingerprint and blackbody fit | This provides labels (ex. Epsilon Indi B, a brown dwarf, is automatically labelled "strong methane: T/Y brown dwarf" |
+| Brightness tab compares surveys at matched wavelengths (with PSF-halo method for saturated stars) | This shows RW Aur (+46 %) and R Dra (Mira, ~73 %), both flagged variable, whilst Barnard's Star is flagged as steady |
+| Gaia DR3 overlays with positions moved to each survey date, showing fast moving objects drawn with their track | This validates motion
+| Proper-motion-aware search | This shows how positions have moved (ex. Barnard's Star has moved 4.5′ since J2000) |
 
-## Validation on the challenge targets
+## Validation on NASA Space Apps targets
 - **Barnard's Star**: measured shift of about 10″ north over ~1 year in D6 (Gaia: 10.4″/yr).
 - **ε Indi B**: CH₄ absorption 82 % deep and a 4 µm peak, the classic T-dwarf spectrum; 2000σ in the methane lens.
 - **WISE 0855**: at SPHEREx's single-survey limit (~6σ in D6). Stacking surveys helps.
 - **RW Aurigae**: +46 % between surveys. **R Draconis**: ~73 % swing (Mira pulsation), via PSF-halo photometry.
 
-## Run it
+## Set-Up Instructions
+-
 ### Manual
 ```bash
 # backend
