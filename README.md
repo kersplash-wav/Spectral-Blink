@@ -39,6 +39,7 @@ cd frontend && npm install && npm run dev        # http://localhost:5173
 # or everything in one container
 docker build -t spectral-blink . && docker run -p 8000:8000 spectral-blink   # http://localhost:8000
 ```
+### Optional
 Warm the cache for the demo targets: `python -I scripts/precompute.py`.
 
 ## New SPHEREx data
