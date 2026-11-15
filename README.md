@@ -26,12 +26,16 @@ Enter any sky position (or a name like `WISE 0855`). Spectral Blink pulls every 
 - **RW Aurigae**: +46 % between surveys. **R Draconis**: ~73 % swing (Mira pulsation), via PSF-halo photometry.
 
 ## Run it
+### Manual
 ```bash
 # backend
 python3 -m venv .venv && .venv/bin/pip install -r backend/requirements.txt
 .venv/bin/uvicorn backend.app.main:app --port 8000
 # frontend (dev)
 cd frontend && npm install && npm run dev        # http://localhost:5173
+```
+### Docker
+```bash
 # or everything in one container
 docker build -t spectral-blink . && docker run -p 8000:8000 spectral-blink   # http://localhost:8000
 ```
