@@ -19,7 +19,7 @@ In this project, you can enter either any sky position (ex. `269.45, 4.69`, `08h
 | Proper-motion-aware search | This shows how positions have moved (ex. Barnard's Star has moved 4.5′ since J2000) |
 
 ## Set-Up Instructions
-Spectral Blink runs locally. It requires an internet connection given NASA APIs are used.
+Spectral Blink runs locally. It requires an internet connection, given that NASA APIs are used.
 
 ### 1. Get the code
 To begin, either download the code (click the green `Code` button on the repository page, click `Download ZIP`, then unzip the folder), or git clone it (run  `git clone https://github.com/kersplash-wav/Spectral-Blink.git` and then `cd Spectral-Blink` in your terminal).
@@ -51,10 +51,11 @@ The first build will take a few minutes, given the project size. Upon the build 
 If you'd like to use the cache for the demo targets to load more quickly, type the following in your terminal: `python -I scripts/precompute.py`.
 
 ## Validation on NASA Space Apps targets
-- **Barnard's Star**: measured shift of about 10″ north over ~1 year in D6 (Gaia: 10.4″/yr).
-- **Epsilon Indi B**: CH₄ absorption 82 % deep and a 4 µm peak, the classic T-dwarf spectrum; 2000σ in the methane lens.
-- **WISE 0855**: at SPHEREx's single-survey limit (~6σ in D6). Stacking surveys helps.
-- **RW Aurigae**: +46 % between surveys. **R Draconis**: ~73 % swing (Mira pulsation), via PSF-halo photometry.
+- Barnard's Star: measured shift of about 10″ north over ~1 year in D6 (Gaia: 10.4″/yr).
+- Epsilon Indi B: CH₄ absorption 82 % deep and a 4 µm peak, the classic T-dwarf spectrum; 2000σ in the methane lens.
+- WISE 0855: at SPHEREx's single-survey limit (~6σ in D6). Stacking surveys helps.
+- RW Aurigae: +46 % between surveys.
+- R Draconis: ~73 % swing (Mira pulsation), via PSF-halo photometry.
 
 ## New SPHEREx data
 Releases are queried live from IRSA. When a new release appears, add its collection name:
