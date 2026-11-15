@@ -3,7 +3,7 @@ import { toast } from 'sonner'
 import clsx from 'clsx'
 import { useStore } from '../state/store'
 import { loadField, resolveTarget } from '../api/stream'
-import { PRESETS } from '../lib/presets'
+import { PRESETS, PRESET_FOV } from '../lib/presets'
 import { Section, Slider } from '../ui/primitives'
 import { fmtDec, fmtRA } from '../lib/wcs'
 import { fmtArcsec } from '../lib/format'
@@ -55,7 +55,7 @@ export function TargetPanel() {
           {PRESETS.map((p) => {
             const active = presetId === p.id
             return (
-              <button key={p.id} onClick={() => goTo(p.query, { band: p.band as Group | undefined, presetId: p.id })}
+              <button key={p.id} onClick={() => goTo(p.query, { band: p.band as Group | undefined, presetId: p.id, fov: PRESET_FOV })}
                 className={clsx('block w-full border-l px-3 py-1.5 text-left', active ? 'border-ink' : 'border-line hover:border-line-2')}>
                 <div className="flex items-baseline justify-between">
                   <span className={clsx('text-[12.5px]', active ? 'text-ink' : 'text-muted')}>{p.name}</span>

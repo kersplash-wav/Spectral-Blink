@@ -8,6 +8,9 @@ export interface Preset {
 }
 
 // The five NASA Space Apps test targets. Positions are resolved live (with proper motion applied).
+// Presets open at the field of view they're pre-computed at (scripts/precompute.py --fov), so they load instantly.
+export const PRESET_FOV = 0.1
+
 export const PRESETS: Preset[] = [
   { id: 'barnard', name: "Barnard's Star", query: "Barnard's Star", blurb: 'Fastest-moving star in our sky, 10.4″ per year', tag: 'mover' },
   { id: 'wise0855', name: 'WISE 0855', query: 'WISE J085510.83-071442.5', blurb: 'Coldest known brown dwarf, about as cold as the North Pole', tag: 'brown dwarf', band: 'D6' },
