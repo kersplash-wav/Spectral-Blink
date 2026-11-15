@@ -19,9 +19,9 @@ interface Spectrum {
   variability: { epochs: number[]; relative: (number | null)[]; amplitude: number | null; variable: boolean; method: string; saturation_radius_arcsec?: number } | null
 }
 
-const MOL_TINT: Record<string, string> = { H2O: '#6ee7f9', CH4: '#ffb547', CO2: '#ff7a6b', CO: '#c4b5fd' }
-const ACCENT = '#6ee7f9'
-const MUTED = '#3a4458'
+const MOL_TINT: Record<string, string> = { H2O: '#6fb7ff', CH4: '#ff9fd2', CO2: '#ffb38a', CO: '#a6f0d2' }
+const ACCENT = '#6fb7ff'
+const MUTED = '#4d4688'
 
 export function Inspector() {
   const pick = useStore((s) => s.pick)
@@ -55,7 +55,7 @@ export function Inspector() {
       className="scroll-thin flex h-full w-[380px] shrink-0 flex-col overflow-y-auto border-l border-line bg-panel">
       <div className="sticky top-0 z-10 flex items-center justify-between border-b border-line bg-panel/95 px-4 py-3 backdrop-blur">
         <div className="flex items-center gap-2">
-          <Crosshair className="h-4 w-4 text-cyan" />
+          <Crosshair className="h-4 w-4 text-sky" />
           <span className="font-display text-[15px] font-semibold">Inspector</span>
           {pick && <span className="font-mono text-[11px] text-muted tabular">{fmtRA(pick.ra)} {fmtDec(pick.dec)}</span>}
         </div>
@@ -72,17 +72,17 @@ export function Inspector() {
           <p className="text-center text-[12px] text-muted">Measuring this spot in every SPHEREx exposure…</p>
         </div>
       )}
-      {err && <div className="m-4 rounded-lg border border-rose/30 bg-rose/5 p-3 text-[12.5px] text-rose">{err}</div>}
+      {err && <div className="m-4 rounded-lg border border-bloom/30 bg-bloom/5 p-3 text-[12.5px] text-bloom">{err}</div>}
 
       <AnimatePresence mode="wait">
         {pick && spec && fp && !busy && (
           <motion.div key={`${pick.ra}${pick.dec}`} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-4 p-4">
             {/* fingerprint verdict */}
-            <div className={clsx('rounded-xl border p-3.5', fp.kind === 'brown-dwarf' ? 'border-amber/40 bg-amber/[0.07]' : 'border-line bg-panel-2/60')}>
+            <div className={clsx('rounded-xl border p-3.5', fp.kind === 'brown-dwarf' ? 'border-accent/40 bg-accent/[0.07]' : 'border-line bg-panel-2/60')}>
               <div className="flex items-start gap-2.5">
                 {fp.kind === 'saturated' || fp.kind === 'faint'
                   ? <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-muted" />
-                  : <Sparkles className={clsx('mt-0.5 h-4 w-4 shrink-0', fp.kind === 'brown-dwarf' ? 'text-amber' : 'text-cyan')} />}
+                  : <Sparkles className={clsx('mt-0.5 h-4 w-4 shrink-0', fp.kind === 'brown-dwarf' ? 'text-accent' : 'text-sky')} />}
                 <div>
                   <div className="text-[13.5px] font-medium leading-snug">{fp.label}</div>
                   <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-1 font-mono text-[11px] text-muted">
@@ -104,11 +104,11 @@ export function Inspector() {
               <>
                 <div>
                   <div className="mb-2 flex items-center justify-between">
-                    <h4 className="text-[10.5px] font-semibold tracking-[0.14em] text-faint"><span className="uppercase">Spectrum</span> · 0.75–5 µm</h4>
+                    <h4 className="text-[11.5px] font-semibold text-faint">Spectrum · 0.75–5 µm</h4>
                     <div className="flex gap-1">
                       {(['all', ...Array.from({ length: nEp }, (_, i) => i)] as (number | 'all')[]).map((e) => (
                         <button key={String(e)} onClick={() => setHl(e)}
-                          className={clsx('rounded px-1.5 py-0.5 font-mono text-[10.5px] transition', hl === e ? 'bg-cyan/15 text-cyan' : 'text-faint hover:text-ink')}>
+                          className={clsx('rounded px-1.5 py-0.5 font-mono text-[11.5px] transition', hl === e ? 'bg-sky/15 text-sky' : 'text-faint hover:text-ink')}>
                           {e === 'all' ? 'all' : `S${e + 1}`}
                         </button>
                       ))}
@@ -116,7 +116,7 @@ export function Inspector() {
                   </div>
                   {good.length ? <SpectrumChart spec={spec} good={good} hl={hl} /> : (
                     <div className="grid h-48 place-items-center rounded-lg border border-dashed border-line text-center text-[12px] text-muted">
-                      This star saturates SPHEREx’s detectors,<br />so its spectrum can’t be measured.<br />Its brightness changes are still tracked →
+                      This star saturates SPHEREx’s detectors,<br />so its spectrum can’t be measured.<br />Its brightness changes are still tracked below.
                     </div>
                   )}
                   <p className="mt-1.5 text-[11px] leading-snug text-faint">
@@ -126,7 +126,7 @@ export function Inspector() {
 
                 {Object.keys(fp.molecules).length > 0 && (
                   <div>
-                    <h4 className="mb-2 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-faint">Molecular fingerprint</h4>
+                    <h4 className="mb-2 text-[11.5px] font-semibold text-faint">Molecular fingerprint</h4>
                     <div className="space-y-2">
                       {Object.entries(fp.molecules).map(([k, m]) => {
                         const d = m.depth
@@ -171,20 +171,20 @@ function SpectrumChart({ spec, good, hl }: { spec: Spectrum; good: SpecPoint[]; 
     <div className="h-56 rounded-lg border border-line bg-void/40 pt-2">
       <ResponsiveContainer width="100%" height="100%">
         <ComposedChart margin={{ top: 6, right: 12, bottom: 18, left: -6 }}>
-          <CartesianGrid stroke="#1d2536" strokeDasharray="2 4" vertical={false} />
+          <CartesianGrid stroke="#2c2660" strokeDasharray="2 4" vertical={false} />
           {Object.entries(fp.molecules).map(([k, m]) => (
             <ReferenceArea key={k} x1={m.band[0]} x2={m.band[1]} fill={MOL_TINT[k]} fillOpacity={0.08} stroke="none" ifOverflow="hidden"
               label={{ value: k.replace('2', '₂').replace('4', '₄'), position: 'insideTop', fill: MOL_TINT[k], fontSize: 10, opacity: 0.8 }} />
           ))}
-          <XAxis type="number" dataKey="x" domain={[0.7, 5.05]} ticks={[1, 2, 3, 4, 5]} tick={{ fill: '#8b94a8', fontSize: 10.5 }}
-            stroke="#2a3448" label={{ value: 'wavelength (µm)', position: 'insideBottom', offset: -10, fill: '#5b6478', fontSize: 10.5 }} />
-          <YAxis type="number" dataKey="y" domain={[yMin, yMax]} allowDataOverflow tick={{ fill: '#8b94a8', fontSize: 10.5 }} stroke="#2a3448"
+          <XAxis type="number" dataKey="x" domain={[0.7, 5.05]} ticks={[1, 2, 3, 4, 5]} tick={{ fill: '#a8a3d0', fontSize: 10.5 }}
+            stroke="#3d3680" label={{ value: 'wavelength (µm)', position: 'insideBottom', offset: -10, fill: '#8d88bd', fontSize: 10.5 }} />
+          <YAxis type="number" dataKey="y" domain={[yMin, yMax]} allowDataOverflow tick={{ fill: '#a8a3d0', fontSize: 10.5 }} stroke="#3d3680"
             tickFormatter={(v: number) => (Math.abs(v) >= 100 ? v.toFixed(0) : v.toPrecision(2))} width={48}
-            label={{ value: 'mJy', angle: -90, position: 'insideLeft', offset: 18, fill: '#5b6478', fontSize: 10.5 }} />
-          <Tooltip cursor={{ stroke: '#2a3448' }} content={<PointTip />} />
+            label={{ value: 'mJy', angle: -90, position: 'insideLeft', offset: 18, fill: '#8d88bd', fontSize: 10.5 }} />
+          <Tooltip cursor={{ stroke: '#3d3680' }} content={<PointTip />} />
           {off.length > 0 && <Scatter data={off} fill={MUTED} shape={<Dot r={2.5} />} isAnimationActive={false} />}
           <Scatter data={on} fill={ACCENT} shape={<Dot r={3} />} isAnimationActive={false} />
-          {model.length > 0 && <Line data={model} dataKey="y" stroke="#ffb547" strokeWidth={1.5} strokeDasharray="5 4" dot={false} isAnimationActive={false} />}
+          {model.length > 0 && <Line data={model} dataKey="y" stroke="#ff9fd2" strokeWidth={1.5} strokeDasharray="5 4" dot={false} isAnimationActive={false} />}
         </ComposedChart>
       </ResponsiveContainer>
     </div>
@@ -195,7 +195,7 @@ function SpectrumChart({ spec, good, hl }: { spec: Spectrum; good: SpecPoint[]; 
 function Dot(props: any) {
   const { cx, cy, fill, r } = props
   if (cx == null || cy == null) return null
-  return <circle cx={cx} cy={cy} r={r} fill={fill} stroke="#05070c" strokeWidth={1} />
+  return <circle cx={cx} cy={cy} r={r} fill={fill} stroke="#0b0820" strokeWidth={1} />
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -222,7 +222,7 @@ function BrightnessTab({ spec, band }: { spec: Spectrum; band: string }) {
 
   return (
     <div className="space-y-4">
-      <div className={clsx('rounded-xl border p-3.5', v?.variable ? 'border-rose/40 bg-rose/[0.06]' : 'border-line bg-panel-2/60')}>
+      <div className={clsx('rounded-xl border p-3.5', v?.variable ? 'border-bloom/40 bg-bloom/[0.06]' : 'border-line bg-panel-2/60')}>
         {v && v.amplitude != null ? (
           <>
             <div className="text-[13.5px] font-medium">
@@ -238,7 +238,7 @@ function BrightnessTab({ spec, band }: { spec: Spectrum; band: string }) {
                     <div className="relative h-2 flex-1 rounded-full bg-line">
                       <div className="absolute left-1/2 top-[-3px] h-[14px] w-px bg-line-2" />
                       {r != null && (
-                        <motion.div className={clsx('absolute top-0 h-2 rounded-full', r >= 1 ? 'bg-amber' : 'bg-cyan')}
+                        <motion.div className={clsx('absolute top-0 h-2 rounded-full', r >= 1 ? 'bg-accent' : 'bg-sky')}
                           initial={{ width: 0 }} animate={{ width: `${Math.min(50, Math.abs(r - 1) * 100)}%`, left: r >= 1 ? '50%' : `${50 - Math.min(50, (1 - r) * 100)}%` }} />
                       )}
                     </div>
@@ -256,8 +256,8 @@ function BrightnessTab({ spec, band }: { spec: Spectrum; band: string }) {
       </div>
 
       <div>
-        <h4 className="mb-2 text-[10.5px] font-semibold tracking-[0.14em] text-faint">
-          <span className="uppercase">Every exposure</span> · {det ? `${g.label} ${g.range}` : 'pick a detector'}
+        <h4 className="mb-2 text-[11.5px] font-semibold text-faint">
+          Every exposure · {det ? `${g.label} ${g.range}` : 'pick a detector'}
         </h4>
         {det == null ? (
           <div className="rounded-lg border border-dashed border-line p-4 text-center text-[12px] text-muted">Choose a detector (keys 1–6) to see each individual exposure over time.</div>
@@ -265,10 +265,10 @@ function BrightnessTab({ spec, band }: { spec: Spectrum; band: string }) {
           <div className="h-44 rounded-lg border border-line bg-void/40 pt-2">
             <ResponsiveContainer width="100%" height="100%">
               <ComposedChart margin={{ top: 6, right: 12, bottom: 4, left: -6 }}>
-                <CartesianGrid stroke="#1d2536" strokeDasharray="2 4" vertical={false} />
+                <CartesianGrid stroke="#2c2660" strokeDasharray="2 4" vertical={false} />
                 <XAxis type="number" dataKey="x" domain={['dataMin - 1500000000', 'dataMax + 1500000000']} scale="time"
-                  tickFormatter={(t: number) => new Date(t).toISOString().slice(2, 7)} tick={{ fill: '#8b94a8', fontSize: 10.5 }} stroke="#2a3448" />
-                <YAxis type="number" dataKey="y" tick={{ fill: '#8b94a8', fontSize: 10.5 }} stroke="#2a3448" width={48}
+                  tickFormatter={(t: number) => new Date(t).toISOString().slice(2, 7)} tick={{ fill: '#a8a3d0', fontSize: 10.5 }} stroke="#3d3680" />
+                <YAxis type="number" dataKey="y" tick={{ fill: '#a8a3d0', fontSize: 10.5 }} stroke="#3d3680" width={48}
                   tickFormatter={(v: number) => (Math.abs(v) >= 100 ? v.toFixed(0) : v.toPrecision(2))} />
                 <Tooltip content={<PointTip />} />
                 <Scatter data={pts} fill={g.color === 'var(--color-ink)' ? ACCENT : getComputedStyle(document.documentElement).getPropertyValue(`--color-d${det}`)} shape={<Dot r={3} />} isAnimationActive={false} />

@@ -16,20 +16,20 @@ export function LoadingRadar() {
             <div key={i} className="absolute rounded-full border border-line-2" style={{ inset: `${i * 22}px` }} />
           ))}
           <div className="absolute inset-0 rounded-full" style={{
-            background: 'conic-gradient(from 0deg, rgba(255,181,71,0.35), rgba(255,181,71,0) 70deg, transparent 360deg)',
+            background: 'conic-gradient(from 0deg, rgba(160,139,255,0.4), rgba(160,139,255,0) 70deg, transparent 360deg)',
             animation: 'sweep 2.2s linear infinite',
           }} />
-          <div className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber shadow-[0_0_16px_4px_rgba(255,181,71,0.5)]" />
+          <div className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent" />
         </div>
       ) : (
-        <div className="grid h-20 w-20 place-items-center rounded-full border border-rose/40 text-3xl text-rose">!</div>
+        <div className="grid h-20 w-20 place-items-center rounded-full border border-bloom/40 text-3xl text-bloom">!</div>
       )}
       <div className="max-w-sm text-center">
-        <div className="font-display text-lg font-semibold">{error ? 'Nothing to show here' : target ? `Looking at ${target.name}` : 'Pick a target'}</div>
-        <div className="mt-1 text-sm text-muted">{error ?? status ?? 'Choose one of the targets on the left, or type a name or coordinates.'}</div>
+        <div className="font-display text-xl font-medium">{error ? 'Nothing to show here' : target ? `Looking at ${target.name}` : 'Pick a target'}</div>
+        <div className="mt-1 text-sm text-muted">{error ?? status ?? 'Choose a target on the left, or type a name or coordinates.'}</div>
         {progress && !error && (
           <div className="mx-auto mt-4 h-1 w-56 overflow-hidden rounded-full bg-line">
-            <motion.div className="h-full bg-amber" animate={{ width: `${(100 * progress.done) / progress.total}%` }} transition={{ ease: 'easeOut' }} />
+            <motion.div className="h-full bg-accent" animate={{ width: `${(100 * progress.done) / progress.total}%` }} transition={{ ease: 'easeOut' }} />
           </div>
         )}
       </div>

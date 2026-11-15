@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { motion } from 'motion/react'
 import { Search, Loader2, Navigation } from 'lucide-react'
 import { toast } from 'sonner'
 import clsx from 'clsx'
@@ -11,7 +10,7 @@ import { fmtDec, fmtRA } from '../lib/wcs'
 import { fmtArcsec } from '../lib/format'
 import type { Group } from '../lib/types'
 
-const TAG_COLOR: Record<Preset['tag'], string> = { mover: 'text-cyan', 'brown dwarf': 'text-amber', variable: 'text-rose' }
+const TAG_COLOR: Record<Preset['tag'], string> = { mover: 'text-sky', 'brown dwarf': 'text-accent', variable: 'text-bloom' }
 
 export async function goTo(query: string, opts: { fov?: number; band?: Group; presetId?: string } = {}) {
   const fov = opts.fov ?? useStore.getState().fov
@@ -52,28 +51,33 @@ export function TargetPanel() {
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-faint" />
           <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Name or RA Dec…"
             id="target-search"
-            className="w-full rounded-lg border border-line bg-panel-2 py-2 pl-9 pr-9 text-[13.5px] outline-none transition placeholder:text-faint focus:border-amber/60 focus:ring-2 focus:ring-amber/15" />
-          {busy && <Loader2 className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-amber" />}
+            className="w-full rounded-md border border-line-2 bg-void py-2 pl-9 pr-9 text-[14px] outline-none placeholder:text-faint focus:border-accent" />
+          {busy && <Loader2 className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-accent" />}
         </form>
-        <p className="mt-1.5 text-[11px] text-faint">e.g. <span className="font-mono">08h55m10.8s −7d14m42s</span> or <span className="font-mono">133.79, −7.24</span></p>
+        <p className="mt-2 text-[12px] leading-relaxed text-faint">
+          Type a name, or coordinates like<br />
+          <span className="font-mono">08h55m10.8s −7d14m42s</span><br />
+          <span className="font-mono">133.79, −7.24</span>
+        </p>
 
-        <div className="mt-3 flex flex-col gap-1.5">
+        <ul className="mt-4 -mx-1">
           {PRESETS.map((p) => {
             const active = presetId === p.id
             return (
-              <motion.button key={p.id} whileHover={{ x: 2 }} whileTap={{ scale: 0.98 }}
-                onClick={() => goTo(p.query, { band: p.band as Group | undefined, presetId: p.id })}
-                className={clsx('rounded-lg border px-3 py-2 text-left transition-colors',
-                  active ? 'border-amber/50 bg-amber/[0.07]' : 'border-line bg-panel-2/60 hover:border-line-2 hover:bg-panel-2')}>
-                <div className="flex items-center justify-between">
-                  <span className="text-[13px] font-medium">{p.name}</span>
-                  <span className={clsx('text-[10px] font-medium uppercase tracking-wider', TAG_COLOR[p.tag])}>{p.tag}</span>
-                </div>
-                <div className="mt-0.5 text-[11.5px] leading-snug text-muted">{p.blurb}</div>
-              </motion.button>
+              <li key={p.id}>
+                <button onClick={() => goTo(p.query, { band: p.band as Group | undefined, presetId: p.id })}
+                  className={clsx('w-full border-l-2 py-2 pl-3 pr-2 text-left transition-colors',
+                    active ? 'border-accent bg-panel-2' : 'border-transparent hover:bg-panel-2/60')}>
+                  <div className="flex items-baseline justify-between gap-2">
+                    <span className="text-[14px] font-medium">{p.name}</span>
+                    <span className={clsx('text-[12px]', TAG_COLOR[p.tag])}>{p.tag}</span>
+                  </div>
+                  <div className="mt-0.5 text-[12.5px] leading-snug text-muted">{p.blurb}</div>
+                </button>
+              </li>
             )
           })}
-        </div>
+        </ul>
       </Section>
 
       {target && (
@@ -84,7 +88,7 @@ export function TargetPanel() {
           </div>
           {target.type && <div className="mt-1 text-[11.5px] text-muted">{target.name} · {target.type}{target.sptype ? ` · ${target.sptype}` : ''}</div>}
           {!!target.moved_arcsec && target.moved_arcsec > 5 && (
-            <div className="mt-2 flex items-start gap-2 rounded-md border border-cyan/25 bg-cyan/[0.06] px-2.5 py-2 text-[11.5px] leading-snug text-cyan">
+            <div className="mt-2 flex items-start gap-2 rounded-md border border-sky/25 bg-sky/[0.06] px-2.5 py-2 text-[11.5px] leading-snug text-sky">
               <Navigation className="mt-0.5 h-3.5 w-3.5 shrink-0" />
               <span>Moved <b>{fmtArcsec(target.moved_arcsec)}</b> since its catalogue position (J2000). We re-centred on where it is now.</span>
             </div>

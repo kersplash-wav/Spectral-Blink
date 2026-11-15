@@ -6,9 +6,9 @@ import type { ReactNode } from 'react'
 
 export function Section({ title, right, children }: { title: string; right?: ReactNode; children: ReactNode }) {
   return (
-    <section className="border-b border-line px-4 py-4">
-      <div className="mb-2.5 flex items-center justify-between">
-        <h3 className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-faint">{title}</h3>
+    <section className="border-b border-line px-5 py-5">
+      <div className="mb-3 flex items-baseline justify-between">
+        <h3 className="font-display text-[16px] font-medium text-ink">{title}</h3>
         {right}
       </div>
       {children}
@@ -35,13 +35,13 @@ export function Segmented<T extends string>({ value, options, onChange, id }: {
   options: { value: T; label: ReactNode; title?: string; disabled?: boolean }[]
 }) {
   return (
-    <div className="relative flex rounded-lg border border-line bg-panel-2 p-0.5">
+    <div className="relative flex rounded-md border border-line bg-panel-2 p-0.5">
       {options.map((o) => (
         <button key={o.value} title={o.title} disabled={o.disabled} onClick={() => onChange(o.value)}
-          className={clsx('relative z-10 flex-1 rounded-md px-2 py-1.5 text-[12.5px] font-medium transition-colors',
+          className={clsx('relative z-10 flex-1 rounded px-2 py-1.5 text-[13px] font-medium transition-colors',
             value === o.value ? 'text-void' : 'text-muted hover:text-ink', o.disabled && 'cursor-not-allowed opacity-40')}>
           {value === o.value && (
-            <motion.span layoutId={`seg-${id}`} className="absolute inset-0 -z-10 rounded-md bg-amber"
+            <motion.span layoutId={`seg-${id}`} className="absolute inset-0 -z-10 rounded bg-accent"
               transition={{ type: 'spring', stiffness: 500, damping: 38 }} />
           )}
           {o.label}
@@ -66,5 +66,16 @@ export function Tip({ label, children }: { label: ReactNode; children: ReactNode
 }
 
 export function Kbd({ children }: { children: ReactNode }) {
-  return <kbd className="rounded border border-line-2 bg-panel-2 px-1.5 py-0.5 font-mono text-[10.5px] text-muted">{children}</kbd>
+  return <kbd className="whitespace-nowrap rounded border border-line-2 bg-panel-2 px-1.5 py-0.5 font-mono text-[11.5px] text-muted">{children}</kbd>
+}
+
+/** Logo: where the object was (dashed ring) and where it is now (filled dot). */
+export function Logo({ size = 28 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 32 32" aria-hidden="true">
+      <circle cx="10.5" cy="19.5" r="4.2" fill="none" stroke="var(--color-sky)" strokeWidth="1.8" strokeDasharray="2.2 2" />
+      <circle cx="21.5" cy="12.5" r="4.6" fill="var(--color-accent)" />
+      <circle cx="26" cy="6.5" r="1" fill="var(--color-ink)" />
+    </svg>
+  )
 }

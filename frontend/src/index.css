@@ -1,27 +1,32 @@
 @import "tailwindcss";
 
 @theme {
-  --color-void: #05070c;
-  --color-panel: #0b0f18;
-  --color-panel-2: #111726;
-  --color-line: #1d2536;
-  --color-line-2: #2a3448;
-  --color-ink: #e7eaf1;
-  --color-muted: #8b94a8;
-  --color-faint: #5b6478;
-  --color-amber: #ffb547;
-  --color-cyan: #6ee7f9;
-  --color-rose: #ff6b81;
-  --color-d1: #8ea8ff;
-  --color-d2: #6ee7f9;
-  --color-d3: #7ef0a8;
-  --color-d4: #f2e46b;
-  --color-d5: #ffb547;
-  --color-d6: #ff7a6b;
+  /* night sky, leaning indigo */
+  --color-void: #0b0820;
+  --color-panel: #141030;
+  --color-panel-2: #1d1844;
+  --color-line: #2c2660;
+  --color-line-2: #413a86;
+  --color-ink: #ece9ff;
+  --color-muted: #aaa5d6;
+  --color-faint: #8d88bd;
 
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Space Grotesk", "Inter", sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  /* accents: violet is the main one, sky blue and bloom pink support it */
+  --color-accent: #a08bff;
+  --color-sky: #6fb7ff;
+  --color-bloom: #ff7fbf;
+
+  /* SPHEREx detectors, short to long wavelength */
+  --color-d1: #7f95ff;
+  --color-d2: #5cc3ff;
+  --color-d3: #6fe3c4;
+  --color-d4: #f0e27a;
+  --color-d5: #ffa56b;
+  --color-d6: #ff6f9f;
+
+  --font-sans: "Figtree", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-mono: "Spline Sans Mono", ui-monospace, monospace;
 }
 
 html, body, #root { height: 100%; }
@@ -34,29 +39,46 @@ body {
   overflow: hidden;
 }
 
-::selection { background: color-mix(in oklab, var(--color-amber) 40%, transparent); }
+::selection { background: color-mix(in oklab, var(--color-accent) 45%, transparent); }
+
+:focus-visible { outline: 2px solid var(--color-sky); outline-offset: 2px; }
+input:focus-visible { outline: none; }
 
 .tabular { font-variant-numeric: tabular-nums; }
 
 /* thin scrollbars inside panels */
 .scroll-thin { scrollbar-width: thin; scrollbar-color: var(--color-line-2) transparent; }
 
-/* radix slider */
-.slider-root { position: relative; display: flex; align-items: center; user-select: none; touch-action: none; height: 18px; }
-.slider-track { position: relative; flex-grow: 1; height: 4px; border-radius: 999px; background: var(--color-line-2); }
-.slider-range { position: absolute; height: 100%; border-radius: 999px; background: var(--color-amber); }
-.slider-thumb {
-  display: block; width: 14px; height: 14px; border-radius: 999px; background: var(--color-ink);
-  box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-amber) 25%, transparent);
-  transition: box-shadow .15s ease, transform .15s ease;
+/* the viewer's backdrop: two hand-scattered star layers over a soft violet-blue haze */
+.sky {
+  background-color: var(--color-void);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22740%22 height=%22740%22%3E%3Ccircle cx=%2254.4%22 cy=%22595.2%22 r=%221.23%22 fill=%22%23ffd9ee%22 fill-opacity=%220.46%22/%3E%3Ccircle cx=%22555.5%22 cy=%22291.3%22 r=%220.93%22 fill=%22%23dcd6ff%22 fill-opacity=%220.64%22/%3E%3Ccircle cx=%2294.3%22 cy=%22246.5%22 r=%221.27%22 fill=%22%23bcd4ff%22 fill-opacity=%220.64%22/%3E%3Ccircle cx=%22262.5%22 cy=%22293.6%22 r=%221.46%22 fill=%22%23ffd9ee%22 fill-opacity=%220.55%22/%3E%3Ccircle cx=%22685.4%22 cy=%22122.5%22 r=%221.03%22 fill=%22%23dcd6ff%22 fill-opacity=%220.70%22/%3E%3Ccircle cx=%22135.5%22 cy=%22669.3%22 r=%221.26%22 fill=%22%23ffd9ee%22 fill-opacity=%220.79%22/%3E%3Ccircle cx=%22101.5%22 cy=%22100.3%22 r=%221.04%22 fill=%22%23dcd6ff%22 fill-opacity=%220.68%22/%3E%3Ccircle cx=%22152.2%22 cy=%22437.0%22 r=%221.26%22 fill=%22%23bcd4ff%22 fill-opacity=%220.71%22/%3E%3Ccircle cx=%22149.0%22 cy=%22681.3%22 r=%221.23%22 fill=%22%23bcd4ff%22 fill-opacity=%220.82%22/%3E%3Ccircle cx=%22534.7%22 cy=%22216.5%22 r=%221.14%22 fill=%22%23dcd6ff%22 fill-opacity=%220.88%22/%3E%3Ccircle cx=%22612.9%22 cy=%22483.4%22 r=%221.11%22 fill=%22%23ffd9ee%22 fill-opacity=%220.94%22/%3E%3Ccircle cx=%22686.7%22 cy=%22732.8%22 r=%221.39%22 fill=%22%23bcd4ff%22 fill-opacity=%220.92%22/%3E%3Ccircle cx=%22456.0%22 cy=%22482.5%22 r=%221.22%22 fill=%22%23bcd4ff%22 fill-opacity=%220.66%22/%3E%3Ccircle cx=%22424.4%22 cy=%22325.2%22 r=%221.41%22 fill=%22%23dcd6ff%22 fill-opacity=%220.67%22/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22360%22 height=%22360%22%3E%3Ccircle cx=%22145.2%22 cy=%2259.0%22 r=%220.47%22 fill=%22%23ffffff%22 fill-opacity=%220.57%22/%3E%3Ccircle cx=%2228.5%22 cy=%22283.6%22 r=%220.46%22 fill=%22%23ffd9ee%22 fill-opacity=%220.87%22/%3E%3Ccircle cx=%22172.5%22 cy=%22204.6%22 r=%220.49%22 fill=%22%23bcd4ff%22 fill-opacity=%220.76%22/%3E%3Ccircle cx=%2281.1%22 cy=%22327.1%22 r=%220.78%22 fill=%22%23ffffff%22 fill-opacity=%220.67%22/%3E%3Ccircle cx=%2220.5%22 cy=%2277.0%22 r=%220.50%22 fill=%22%23ffd9ee%22 fill-opacity=%220.53%22/%3E%3Ccircle cx=%22336.2%22 cy=%22296.3%22 r=%220.46%22 fill=%22%23dcd6ff%22 fill-opacity=%220.51%22/%3E%3Ccircle cx=%22313.4%22 cy=%2231.8%22 r=%220.77%22 fill=%22%23bcd4ff%22 fill-opacity=%220.89%22/%3E%3Ccircle cx=%22152.9%22 cy=%22342.0%22 r=%220.89%22 fill=%22%23ffffff%22 fill-opacity=%220.79%22/%3E%3Ccircle cx=%22223.3%22 cy=%2212.0%22 r=%220.74%22 fill=%22%23dcd6ff%22 fill-opacity=%220.79%22/%3E%3Ccircle cx=%22200.4%22 cy=%22337.8%22 r=%220.72%22 fill=%22%23dcd6ff%22 fill-opacity=%220.85%22/%3E%3Ccircle cx=%22341.5%22 cy=%22358.5%22 r=%220.52%22 fill=%22%23ffffff%22 fill-opacity=%220.90%22/%3E%3Ccircle cx=%22269.3%22 cy=%225.9%22 r=%220.69%22 fill=%22%23ffffff%22 fill-opacity=%220.75%22/%3E%3Ccircle cx=%2231.0%22 cy=%22309.3%22 r=%220.49%22 fill=%22%23ffd9ee%22 fill-opacity=%220.70%22/%3E%3Ccircle cx=%2252.6%22 cy=%2275.6%22 r=%220.51%22 fill=%22%23ffd9ee%22 fill-opacity=%220.54%22/%3E%3Ccircle cx=%22118.5%22 cy=%22328.2%22 r=%220.80%22 fill=%22%23ffd9ee%22 fill-opacity=%220.73%22/%3E%3Ccircle cx=%2248.6%22 cy=%22223.7%22 r=%220.53%22 fill=%22%23bcd4ff%22 fill-opacity=%220.88%22/%3E%3Ccircle cx=%22218.6%22 cy=%22349.2%22 r=%220.61%22 fill=%22%23dcd6ff%22 fill-opacity=%220.44%22/%3E%3Ccircle cx=%22119.3%22 cy=%22259.6%22 r=%220.81%22 fill=%22%23bcd4ff%22 fill-opacity=%220.73%22/%3E%3Ccircle cx=%22103.4%22 cy=%22152.1%22 r=%220.80%22 fill=%22%23dcd6ff%22 fill-opacity=%220.92%22/%3E%3Ccircle cx=%22336.0%22 cy=%22300.9%22 r=%220.61%22 fill=%22%23bcd4ff%22 fill-opacity=%220.53%22/%3E%3Ccircle cx=%22248.5%22 cy=%22327.2%22 r=%220.80%22 fill=%22%23bcd4ff%22 fill-opacity=%220.41%22/%3E%3Ccircle cx=%22303.6%22 cy=%22280.5%22 r=%220.71%22 fill=%22%23ffffff%22 fill-opacity=%220.75%22/%3E%3Ccircle cx=%22224.1%22 cy=%22321.1%22 r=%220.41%22 fill=%22%23dcd6ff%22 fill-opacity=%220.52%22/%3E%3Ccircle cx=%2221.3%22 cy=%2259.6%22 r=%220.70%22 fill=%22%23bcd4ff%22 fill-opacity=%220.44%22/%3E%3Ccircle cx=%22307.8%22 cy=%22162.5%22 r=%220.66%22 fill=%22%23ffd9ee%22 fill-opacity=%220.92%22/%3E%3Ccircle cx=%22128.7%22 cy=%22279.4%22 r=%220.74%22 fill=%22%23bcd4ff%22 fill-opacity=%220.94%22/%3E%3Ccircle cx=%2250.9%22 cy=%22300.7%22 r=%220.67%22 fill=%22%23bcd4ff%22 fill-opacity=%220.41%22/%3E%3Ccircle cx=%2264.2%22 cy=%229.2%22 r=%220.48%22 fill=%22%23ffd9ee%22 fill-opacity=%220.44%22/%3E%3Ccircle cx=%22259.6%22 cy=%22233.4%22 r=%220.52%22 fill=%22%23bcd4ff%22 fill-opacity=%220.49%22/%3E%3Ccircle cx=%22329.4%22 cy=%22190.5%22 r=%220.53%22 fill=%22%23ffffff%22 fill-opacity=%220.88%22/%3E%3Ccircle cx=%22163.8%22 cy=%22306.5%22 r=%220.70%22 fill=%22%23bcd4ff%22 fill-opacity=%220.63%22/%3E%3Ccircle cx=%22272.4%22 cy=%22334.7%22 r=%220.56%22 fill=%22%23ffd9ee%22 fill-opacity=%220.42%22/%3E%3Ccircle cx=%22148.3%22 cy=%229.0%22 r=%220.88%22 fill=%22%23dcd6ff%22 fill-opacity=%220.36%22/%3E%3Ccircle cx=%22126.7%22 cy=%22226.6%22 r=%220.73%22 fill=%22%23dcd6ff%22 fill-opacity=%220.49%22/%3E%3Ccircle cx=%22260.7%22 cy=%22230.0%22 r=%220.64%22 fill=%22%23ffd9ee%22 fill-opacity=%220.43%22/%3E%3Ccircle cx=%22284.2%22 cy=%22302.7%22 r=%220.52%22 fill=%22%23ffd9ee%22 fill-opacity=%220.87%22/%3E%3Ccircle cx=%22148.5%22 cy=%2256.7%22 r=%220.67%22 fill=%22%23ffd9ee%22 fill-opacity=%220.57%22/%3E%3Ccircle cx=%22152.2%22 cy=%22162.3%22 r=%220.60%22 fill=%22%23bcd4ff%22 fill-opacity=%220.43%22/%3E%3Ccircle cx=%2243.4%22 cy=%22215.7%22 r=%220.65%22 fill=%22%23ffffff%22 fill-opacity=%220.42%22/%3E%3Ccircle cx=%22187.9%22 cy=%22184.0%22 r=%220.78%22 fill=%22%23dcd6ff%22 fill-opacity=%220.48%22/%3E%3Ccircle cx=%2233.6%22 cy=%22237.5%22 r=%220.44%22 fill=%22%23bcd4ff%22 fill-opacity=%220.40%22/%3E%3Ccircle cx=%22164.7%22 cy=%22188.8%22 r=%220.83%22 fill=%22%23bcd4ff%22 fill-opacity=%220.36%22/%3E%3Ccircle cx=%22230.7%22 cy=%22145.4%22 r=%220.67%22 fill=%22%23ffd9ee%22 fill-opacity=%220.69%22/%3E%3Ccircle cx=%22255.2%22 cy=%220.9%22 r=%220.86%22 fill=%22%23bcd4ff%22 fill-opacity=%220.40%22/%3E%3Ccircle cx=%2285.8%22 cy=%22171.7%22 r=%220.50%22 fill=%22%23bcd4ff%22 fill-opacity=%220.78%22/%3E%3Ccircle cx=%2288.6%22 cy=%22260.5%22 r=%220.84%22 fill=%22%23dcd6ff%22 fill-opacity=%220.41%22/%3E%3C/svg%3E"),
+    radial-gradient(60% 55% at 22% 18%, rgba(96, 70, 210, 0.28), transparent 70%),
+    radial-gradient(55% 60% at 82% 85%, rgba(40, 96, 200, 0.24), transparent 70%),
+    radial-gradient(ellipse at center, #130e33 0%, #0b0820 75%);
 }
-.slider-thumb:hover { transform: scale(1.12); }
-.slider-thumb:focus-visible { outline: none; box-shadow: 0 0 0 6px color-mix(in oklab, var(--color-amber) 45%, transparent); }
+
+/* radix slider */
+.slider-root { position: relative; display: flex; align-items: center; user-select: none; touch-action: none; height: 20px; }
+.slider-track { position: relative; flex-grow: 1; height: 3px; border-radius: 999px; background: var(--color-line-2); }
+.slider-range { position: absolute; height: 100%; border-radius: 999px; background: var(--color-accent); }
+.slider-thumb {
+  display: block; width: 16px; height: 16px; border-radius: 999px;
+  background: var(--color-ink); border: 3px solid var(--color-accent);
+}
+.slider-thumb:hover { border-color: var(--color-sky); }
 
 @keyframes sweep { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
 .shimmer {
-  background: linear-gradient(90deg, var(--color-panel-2) 0%, var(--color-line-2) 50%, var(--color-panel-2) 100%);
+  background: linear-gradient(90deg, var(--color-panel-2) 0%, var(--color-line) 50%, var(--color-panel-2) 100%);
   background-size: 200% 100%;
-  animation: shimmer 1.4s linear infinite;
+  animation: shimmer 1.6s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shimmer { animation: none; }
+  *, *::before, *::after { scroll-behavior: auto !important; }
 }

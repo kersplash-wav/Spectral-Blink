@@ -2,7 +2,7 @@ export type Group = 'all' | 'D1' | 'D2' | 'D3' | 'D4' | 'D5' | 'D6'
 export type Mode = 'blink' | 'diff' | 'molecule' | 'stack'
 export type Mol = 'CH4' | 'H2O' | 'CO2' | 'CO'
 export type StretchKind = 'asinh' | 'linear' | 'log'
-export type Cmap = 'grey' | 'ember' | 'ice'
+export type Cmap = 'grey' | 'nebula' | 'cobalt'
 
 export interface Exposure {
   id: string
