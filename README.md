@@ -18,35 +18,49 @@ In this project, you can enter either any sky position (ex. `269.45, 4.69`, `08h
 | Gaia DR3 overlays with positions moved to each survey date, showing fast moving objects drawn with their track | This validates motion
 | Proper-motion-aware search | This shows how positions have moved (ex. Barnard's Star has moved 4.5′ since J2000) |
 
-## Validation on NASA Space Apps targets
-- **Barnard's Star**: measured shift of about 10″ north over ~1 year in D6 (Gaia: 10.4″/yr).
-- **ε Indi B**: CH₄ absorption 82 % deep and a 4 µm peak, the classic T-dwarf spectrum; 2000σ in the methane lens.
-- **WISE 0855**: at SPHEREx's single-survey limit (~6σ in D6). Stacking surveys helps.
-- **RW Aurigae**: +46 % between surveys. **R Draconis**: ~73 % swing (Mira pulsation), via PSF-halo photometry.
-
 ## Set-Up Instructions
--
-### Manual
+Spectral Blink runs locally. It requires an internet connection given NASA APIs are used.
+
+### 1. Get the code
+To begin, either download the code (click the green `Code` button on the repository page, click `Download ZIP`, then unzip the folder), or git clone it (run  `git clone https://github.com/kersplash-wav/Spectral-Blink.git` and then `cd Spectral-Blink` in your terminal).
+
+### 2. Run the code
+For this, you can either use Docker (this is easier, given that you have Docker installed) or your terminal (this would require having Python 3.12 and Node.js 22 installed).
+
+### Docker
+If using Docker, run the following lines:
 ```bash
-# backend
+docker build -t spectral-blink .
+docker run -p 8000:8000 spectral-blink
+```
+
+The first build will take a few minutes, given the project size. Upon the build finishing, open http://localhost:8000.
+
+### Manual
+If not using Docker, run the following lines:
+```bash
+# These lines are for the back-end
 python3 -m venv .venv && .venv/bin/pip install -r backend/requirements.txt
 .venv/bin/uvicorn backend.app.main:app --port 8000
-# frontend (dev)
-cd frontend && npm install && npm run dev        # http://localhost:5173
+# This line is for the frontend
+cd frontend && npm install && npm run dev
 ```
-### Docker
-```bash
-# or everything in one container
-docker build -t spectral-blink . ; docker run -p 8000:8000 spectral-blink   # http://localhost:8000
-```
+The first build will take a few minutes, given the project size. Upon the build finishing, open http://localhost:5173.
+
 ### Optional
-Warm the cache for the demo targets: `python -I scripts/precompute.py`.
+If you'd like to use the cache for the demo targets to load more quickly, type the following in your terminal: `python -I scripts/precompute.py`.
+
+## Validation on NASA Space Apps targets
+- **Barnard's Star**: measured shift of about 10″ north over ~1 year in D6 (Gaia: 10.4″/yr).
+- **Epsilon Indi B**: CH₄ absorption 82 % deep and a 4 µm peak, the classic T-dwarf spectrum; 2000σ in the methane lens.
+- **WISE 0855**: at SPHEREx's single-survey limit (~6σ in D6). Stacking surveys helps.
+- **RW Aurigae**: +46 % between surveys. **R Draconis**: ~73 % swing (Mira pulsation), via PSF-halo photometry.
 
 ## New SPHEREx data
 Releases are queried live from IRSA. When a new release appears, add its collection name:
 `SPHEREX_COLLECTIONS=spherex_dr1,spherex_qr3,spherex_qr4` (env var, or `backend/app/config.py`). Nothing else changes.
 
-## How it works
+## How our project works
 ```
 Browser (React)                                 FastAPI backend
   stretch, colour, diff, stack (all client-side)   IRSA SIA query → exposure list
