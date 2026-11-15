@@ -1,4 +1,7 @@
 # Spectral Blink
+![A promotional banner which says "Spectral Blink"](https://github.com/kersplash-wav/Spectral-Blink/blob/main/frontend/public/SpectralBlinkPromotionalBanner.png?raw-true)
+<p align="center">Developed by Ahmad Al Muzanen, Nico Ranin, Robert Rodriguez, Brandon Nevestuk, and Carl Asojo</p>
+
 
 **Watch the infrared sky change with NASA's SPHEREx.**
 NASA Space Apps Challenge 2026: *Planet X and SPHEREx*.
