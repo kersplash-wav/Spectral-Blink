@@ -1,7 +1,6 @@
 import { AnimatePresence } from 'motion/react'
 import * as RTooltip from '@radix-ui/react-tooltip'
 import { Toaster } from 'sonner'
-import { HelpCircle, Satellite } from 'lucide-react'
 import { useStore } from './state/store'
 import { useHotkeys } from './state/hotkeys'
 import { SkyCanvas } from './viewer/SkyCanvas'
@@ -11,6 +10,7 @@ import { Timeline } from './panels/Timeline'
 import { Inspector } from './panels/Inspector'
 import { HelpSheet } from './panels/HelpSheet'
 import { useMoleculeLoader } from './viewer/useRendered'
+import { Starfield } from './ui/Starfield'
 
 export const APP_NAME = 'Spectral Blink'
 
@@ -25,22 +25,22 @@ export default function App() {
 
   return (
     <RTooltip.Provider>
-      <div className="flex h-full flex-col">
+      <Starfield />
+      <div className="relative flex h-full flex-col">
         {!embed && (
-          <header className="flex h-12 shrink-0 items-center justify-between border-b border-line bg-panel px-4">
-            <div className="flex items-center gap-2.5">
-              <div className="grid h-7 w-7 place-items-center rounded-lg bg-amber/15 text-amber"><Satellite className="h-4 w-4" /></div>
-              <span className="font-display text-[16px] font-semibold tracking-tight">{APP_NAME}</span>
-              <span className="hidden text-[12.5px] text-muted md:inline">· watch the infrared sky change with NASA’s SPHEREx</span>
+          <header className="flex h-10 shrink-0 items-center justify-between border-b border-line bg-panel px-4">
+            <div className="flex items-baseline gap-3">
+              <span className="text-[13px] text-ink">{APP_NAME.toLowerCase()}</span>
+              <span className="hidden text-[11.5px] text-faint md:inline">infrared sky viewer · NASA SPHEREx</span>
             </div>
             <div className="flex items-center gap-3">
               {manifest && (
-                <span className="hidden rounded-full border border-line px-2.5 py-1 font-mono text-[10.5px] text-muted sm:inline">
+                <span className="hidden text-[11px] text-faint sm:inline">
                   {manifest.exposures.length} exposures · {manifest.collections.join(' + ')}
                 </span>
               )}
-              <button onClick={() => set({ helpOpen: true })} className="flex items-center gap-1.5 rounded-md px-2 py-1 text-[12.5px] text-muted hover:bg-panel-2 hover:text-ink">
-                <HelpCircle className="h-4 w-4" /> Help <span className="font-mono text-faint">?</span>
+              <button onClick={() => set({ helpOpen: true })} className="text-[11.5px] text-muted hover:text-ink">
+                help [?]
               </button>
             </div>
           </header>
@@ -60,7 +60,7 @@ export default function App() {
         <Timeline />
       </div>
       <AnimatePresence>{helpOpen && <HelpSheet key="help" />}</AnimatePresence>
-      <Toaster theme="dark" position="top-center" toastOptions={{ style: { background: 'var(--color-panel-2)', border: '1px solid var(--color-line-2)' } }} />
+      <Toaster theme="dark" position="top-center" toastOptions={{ style: { background: 'var(--color-panel)', border: '1px solid var(--color-line-2)', borderRadius: 0, fontFamily: 'var(--font-sans)', fontSize: 12 } }} />
     </RTooltip.Provider>
   )
 }

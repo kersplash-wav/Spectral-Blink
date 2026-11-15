@@ -123,13 +123,13 @@ export function SkyCanvas() {
         ctx.globalAlpha = 1
       }
       // frame border
-      ctx.strokeStyle = 'rgba(255,255,255,0.08)'
+      ctx.strokeStyle = 'rgba(255,255,255,0.12)'
       ctx.lineWidth = 1
       ctx.strokeRect(L.x0 - 0.5, L.y0 - 0.5, S + 1, S + 1)
       // target reticle (centre of the grid)
       const cx = L.x0 + S / 2, cy = L.y0 + S / 2
       const rr = Math.max(10, L.scale * 2.6)
-      ctx.strokeStyle = 'rgba(255,181,71,0.9)'
+      ctx.strokeStyle = 'rgba(255,255,255,0.85)'
       ctx.lineWidth = 1.5
       for (let k = 0; k < 4; k++) {
         const a = (k * Math.PI) / 2 + Math.PI / 4
@@ -159,15 +159,15 @@ export function SkyCanvas() {
           for (const { g, p } of vis.slice(0, 80)) {
             const fast = Math.hypot(g.pmra, g.pmdec) > 150
             if (fast) continue
-            ctx.strokeStyle = 'rgba(110,231,249,0.5)'
+            ctx.strokeStyle = 'rgba(255,255,255,0.35)'
             const r = Math.max(4, Math.min(L.scale * 2.2, L.scale * (0.9 + Math.max(0, 16 - g.g) * 0.14)))
             ctx.beginPath(); ctx.arc(p[0], p[1], r, 0, Math.PI * 2); ctx.stroke()
           }
           // fast movers: track through every survey + current position
           for (const { g, p } of vis.filter((o) => Math.hypot(o.g.pmra, o.g.pmdec) > 150)) {
             const pts = eps.map((e) => at(g, (e.mjd_mid - 57388.5) / 365.25))
-            ctx.strokeStyle = 'rgba(255,181,71,0.85)'
-            ctx.fillStyle = 'rgba(255,181,71,0.95)'
+            ctx.strokeStyle = 'rgba(255,255,255,0.9)'
+            ctx.fillStyle = 'rgba(255,255,255,0.95)'
             ctx.lineWidth = 1.5
             ctx.beginPath(); pts.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.stroke()
             for (const [x, y] of pts) { ctx.beginPath(); ctx.arc(x, y, 2.2, 0, Math.PI * 2); ctx.fill() }
@@ -180,8 +180,8 @@ export function SkyCanvas() {
           }
         }
         if (st2.showDark) {
-          ctx.strokeStyle = 'rgba(255,107,129,0.95)'
-          ctx.fillStyle = 'rgba(255,107,129,0.95)'
+          ctx.strokeStyle = 'rgba(255,255,255,0.9)'
+          ctx.fillStyle = 'rgba(255,255,255,0.9)'
           ctx.lineWidth = 1.5
           for (const d of ov.detections) {
             if (d.gaia) continue
@@ -197,7 +197,7 @@ export function SkyCanvas() {
       const pick = useStore.getState().pick
       if (pick) {
         const px = L.x0 + (pick.px + 0.5) * L.scale, py = L.y0 + (L.g.npx - 0.5 - pick.py) * L.scale
-        ctx.strokeStyle = 'rgba(110,231,249,0.95)'
+        ctx.strokeStyle = 'rgba(255,255,255,1)'
         ctx.lineWidth = 1.5
         ctx.beginPath(); ctx.arc(px, py, Math.max(7, L.scale * 1.6), 0, Math.PI * 2); ctx.stroke()
         ctx.beginPath(); ctx.moveTo(px - rr * 1.4, py); ctx.lineTo(px - rr * 0.8, py); ctx.moveTo(px + rr * 0.8, py); ctx.lineTo(px + rr * 1.4, py); ctx.stroke()
@@ -210,7 +210,7 @@ export function SkyCanvas() {
       ctx.beginPath(); ctx.moveTo(bx, by); ctx.lineTo(bx + arcminPx, by); ctx.stroke()
       ctx.beginPath(); ctx.moveTo(bx, by - 4); ctx.lineTo(bx, by + 4); ctx.moveTo(bx + arcminPx, by - 4); ctx.lineTo(bx + arcminPx, by + 4); ctx.stroke()
       ctx.fillStyle = 'rgba(231,234,241,0.85)'
-      ctx.font = '500 11px "JetBrains Mono", monospace'
+      ctx.font = '400 11px "JetBrains Mono", monospace'
       ctx.fillText('1′', bx + arcminPx / 2 - 4, by - 8)
       // compass
       const qx = size.current.w - 34, qy = 40
@@ -283,7 +283,7 @@ export function SkyCanvas() {
 
   return (
     <div ref={wrapRef} className="relative h-full w-full overflow-hidden select-none"
-      style={{ background: 'radial-gradient(ellipse at center, #0b1020 0%, #05070c 70%)', cursor: drag.current ? 'grabbing' : 'crosshair' }}
+      style={{ cursor: drag.current ? 'grabbing' : 'crosshair' }}
       onWheel={onWheel} onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerLeave={() => setHover(null)}
       onDoubleClick={() => { view.current = { zoom: 1, ox: 0, oy: 0 } }}>
       <canvas ref={cvRef} className="absolute inset-0 h-full w-full" />
@@ -293,8 +293,8 @@ export function SkyCanvas() {
         {!hasAny && rendered.note && manifest && (
           <motion.div key="note" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="absolute inset-0 grid place-items-center">
-            <div className="max-w-xs rounded-xl border border-line bg-panel/80 px-5 py-4 text-center text-[13px] text-muted backdrop-blur">
-              {(loading || rendered.note.startsWith('Building')) && <div className="mx-auto mb-3 h-6 w-6 animate-spin rounded-full border-2 border-line-2 border-t-amber" />}
+            <div className="max-w-xs border border-line bg-panel px-4 py-3 text-[12px] text-muted">
+              
               {rendered.note}
             </div>
           </motion.div>
@@ -303,24 +303,23 @@ export function SkyCanvas() {
 
       {hasAny && ep && (
         <div className="pointer-events-none absolute left-4 top-4 flex flex-col gap-1.5">
-          <motion.div key={`${frameIdx}`} initial={{ opacity: 0.4, y: -2 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.18 }}
-            className="rounded-lg border border-line bg-panel/80 px-3 py-2 backdrop-blur-md">
-            <div className="font-display text-[15px] font-semibold tracking-tight">
+          <div key={`${frameIdx}`}
+            className="border border-line bg-panel/90 px-2.5 py-1.5">
+            <div className="text-[12.5px] text-ink">
               {mode === 'stack' ? <>All {manifest?.epochs.length} surveys stacked</>
                 : mode === 'molecule' && !molPerSurvey ? <>{MOLECULES.find((m) => m.id === mol)?.sub} lens<span className="text-muted"> · all surveys</span></>
                 : <>Survey {frameIdx + 1}<span className="text-muted"> · {fmtRange(ep.mjd_start, ep.mjd_end)}</span></>}
             </div>
-            <div className="mt-0.5 flex items-center gap-2 font-mono text-[11px] text-muted">
-              <span className="inline-block h-2 w-2 rounded-full" style={{ background: g.color }} />
+            <div className="mt-0.5 flex items-center gap-2 text-[11px] text-muted">
               {mode === 'molecule' ? `${f?.lam ? `${f.lam[0]}–${f.lam[1]} µm vs continuum` : ''}`
                 : band === 'all' ? 'All bands (S/N-weighted)' : `${g.label} · ${f?.lam ? `${f.lam[0].toFixed(2)}–${f.lam[1].toFixed(2)} µm` : g.range}`}
               <span>· {f?.nexp ?? 0} exposures</span>
-              {mode === 'diff' && <span className="text-amber">· difference</span>}
-              {mode === 'stack' && <span className="text-amber">· tracking {stackPm.ra.toFixed(1)}″, {stackPm.dec.toFixed(1)}″ /yr</span>}
+              {mode === 'diff' && <span>· difference</span>}
+              {mode === 'stack' && <span>· tracking {stackPm.ra.toFixed(1)}″, {stackPm.dec.toFixed(1)}″ /yr</span>}
             </div>
-          </motion.div>
+          </div>
           {loading && progress && (
-            <div className="w-fit rounded-md border border-line bg-panel/80 px-2 py-1 font-mono text-[10.5px] text-cyan backdrop-blur-md">
+            <div className="w-fit border border-line bg-panel px-2 py-1 text-[10.5px] text-muted">
               sharpening… {progress.done}/{progress.total}
             </div>
           )}
@@ -328,7 +327,7 @@ export function SkyCanvas() {
       )}
 
       {hover && (
-        <div className="pointer-events-none absolute bottom-3 right-3 rounded-lg border border-line bg-panel/85 px-3 py-1.5 font-mono text-[11px] tabular text-muted backdrop-blur-md">
+        <div className="pointer-events-none absolute bottom-3 right-3 border border-line bg-panel/90 px-2.5 py-1 text-[11px] tabular text-muted">
           <span className="text-ink">{fmtRA(hover.ra)} {fmtDec(hover.dec)}</span>
           <span className="ml-3">{hover.v != null && Number.isFinite(hover.v) ? `${hover.v.toPrecision(3)} ${mode === 'diff' ? 'Δ MJy/sr' : mode === 'molecule' ? 'σ absorption' : band === 'all' ? 'σ' : 'MJy/sr'}` : 'no data'}</span>
         </div>

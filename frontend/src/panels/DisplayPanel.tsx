@@ -1,9 +1,10 @@
 import clsx from 'clsx'
-import { motion } from 'motion/react'
 import { useStore } from '../state/store'
-import { GROUPS, MOLECULES, type Cmap, type Mode, type StretchKind } from '../lib/types'
-import { Navigation, RotateCcw } from 'lucide-react'
+import { GROUPS, MOLECULES, type Mode, type StretchKind } from '../lib/types'
 import { Section, Segmented, Slider, Tip } from '../ui/primitives'
+
+const chip = (active: boolean) =>
+  clsx('border py-1.5 text-center text-[11.5px]', active ? 'border-ink text-ink' : 'border-line text-muted hover:border-line-2 hover:text-ink')
 
 export function DisplayPanel() {
   const s = useStore()
@@ -15,41 +16,37 @@ export function DisplayPanel() {
         <Segmented<Mode> id="mode" value={s.mode} onChange={(mode) => s.set({ mode })} options={[
           { value: 'blink', label: 'Blink', title: 'Flip between sky surveys (B)' },
           { value: 'diff', label: 'Diff', title: 'Each survey minus the average of the others (D)' },
-          { value: 'molecule', label: 'Molecule', title: 'See molecules: methane, water, CO₂, CO (M)' },
+          { value: 'molecule', label: 'Molec', title: 'See molecules: methane, water, CO₂, CO (M)' },
           { value: 'stack', label: 'Stack', title: 'Shift-and-stack along a motion to reveal faint movers (S)' },
         ]} />
         <p className="mt-2 text-[11.5px] leading-snug text-muted">
           {s.mode === 'blink' && 'Things that jump between frames are moving. Things that pulse are changing brightness.'}
-          {s.mode === 'diff' && 'Steady stars cancel out. Movers show up as a blue/amber pair: where it was → where it is.'}
-          {s.mode === 'molecule' && 'Compares light inside a molecule’s absorption band with light just outside it. Ordinary stars cancel; objects containing the molecule glow amber.'}
+          {s.mode === 'diff' && 'Steady stars cancel out. Movers show up as a dark/bright pair: where it was → where it is.'}
+          {s.mode === 'molecule' && 'Compares light inside a molecule’s absorption band with light just outside it. Ordinary stars cancel; objects containing the molecule show bright.'}
           {s.mode === 'stack' && 'Slide each survey back along a guessed motion and add them up. Anything moving at that speed sharpens into a dot; everything else smears.'}
         </p>
         {s.mode === 'molecule' && <MoleculeControls />}
         {s.mode === 'stack' && <StackControls />}
       </Section>
 
-      {s.mode !== 'molecule' && <Section title="Wavelength">
-        <div className="grid grid-cols-7 gap-1">
-          {GROUPS.map((g, i) => {
-            const has = Object.keys(frames).some((k) => k.endsWith(`|${g.id}`))
-            const active = s.band === g.id
-            return (
-              <Tip key={g.id} label={<span><b>{g.id === 'all' ? 'All 6 detectors' : `Detector ${g.label}`}</b><br />{g.range} · key {i}</span>}>
-                <button onClick={() => s.set({ band: g.id })} disabled={!has && !!Object.keys(frames).length}
-                  className={clsx('relative flex flex-col items-center rounded-md border py-1.5 text-[11px] font-medium transition',
-                    active ? 'border-transparent text-ink' : 'border-line text-muted hover:border-line-2 hover:text-ink')}>
-                  {active && <motion.span layoutId="band-hl" className="absolute inset-0 rounded-md border bg-panel-2"
-                    style={{ borderColor: g.color }} transition={{ type: 'spring', stiffness: 500, damping: 38 }} />}
-                  <span className="relative mb-1 h-1.5 w-1.5 rounded-full" style={{ background: g.color }} />
-                  <span className="relative">{g.label}</span>
-                </button>
-              </Tip>
-            )
-          })}
-        </div>
-        <div className="mt-2 h-1.5 rounded-full" style={{ background: 'linear-gradient(90deg, var(--color-d1), var(--color-d2), var(--color-d3), var(--color-d4), var(--color-d5), var(--color-d6))' }} />
-        <div className="mt-1 flex justify-between font-mono text-[10px] text-faint"><span>0.75 µm</span><span>near-infrared</span><span>5.0 µm</span></div>
-      </Section>}
+      {s.mode !== 'molecule' && (
+        <Section title="Wavelength">
+          <div className="grid grid-cols-7 gap-1">
+            {GROUPS.map((g, i) => {
+              const has = Object.keys(frames).some((k) => k.endsWith(`|${g.id}`))
+              return (
+                <Tip key={g.id} label={<span>{g.id === 'all' ? 'All 6 detectors' : `Detector ${g.label}`}<br />{g.range} · key {i}</span>}>
+                  <button onClick={() => s.set({ band: g.id })} disabled={!has && !!Object.keys(frames).length}
+                    className={clsx(chip(s.band === g.id), 'disabled:opacity-30')}>
+                    {g.label}
+                  </button>
+                </Tip>
+              )
+            })}
+          </div>
+          <div className="mt-1.5 flex justify-between text-[10.5px] text-faint"><span>0.75 µm</span><span>5.0 µm</span></div>
+        </Section>
+      )}
 
       <OverlayControls />
 
@@ -59,20 +56,13 @@ export function DisplayPanel() {
         ]} />
         <div className="mt-3 space-y-3">
           <div>
-            <div className="mb-1 flex justify-between text-[11px] text-muted"><span>Highlights</span><span className="font-mono">{s.contrast.toFixed(1)}%</span></div>
+            <div className="mb-1 flex justify-between text-[11px] text-muted"><span>Highlights</span><span>{s.contrast.toFixed(1)}%</span></div>
             <Slider label="Highlights" value={s.contrast} min={95} max={99.95} step={0.05} onChange={(contrast) => s.set({ contrast })} />
           </div>
           <div>
-            <div className="mb-1 flex justify-between text-[11px] text-muted"><span>Black point</span><span className="font-mono">{s.black.toFixed(0)}%</span></div>
+            <div className="mb-1 flex justify-between text-[11px] text-muted"><span>Black point</span><span>{s.black.toFixed(0)}%</span></div>
             <Slider label="Black point" value={s.black} min={0} max={60} step={1} onChange={(black) => s.set({ black })} />
           </div>
-        </div>
-        <div className="mt-3 flex gap-1.5">
-          {(['grey', 'ember', 'ice'] as Cmap[]).map((c) => (
-            <button key={c} onClick={() => s.set({ cmap: c })} title={c}
-              className={clsx('h-6 flex-1 rounded-md border transition', s.cmap === c ? 'border-amber' : 'border-line hover:border-line-2')}
-              style={{ background: c === 'grey' ? 'linear-gradient(90deg,#000,#fff)' : c === 'ember' ? 'linear-gradient(90deg,#000004,#3c0f6e,#b9325a,#fa8c1e,#fcfac8)' : 'linear-gradient(90deg,#02040c,#143c82,#5abee6,#f0fcff)' }} />
-          ))}
         </div>
       </Section>
     </>
@@ -88,21 +78,17 @@ function MoleculeControls() {
     <div className="mt-3">
       <div className="grid grid-cols-4 gap-1">
         {MOLECULES.map((x) => (
-          <button key={x.id} onClick={() => set({ mol: x.id })}
-            className={clsx('rounded-md border py-1.5 text-center transition', mol === x.id ? 'border-amber/70 bg-amber/10 text-amber' : 'border-line text-muted hover:border-line-2 hover:text-ink')}>
-            <div className="font-mono text-[12.5px] font-medium">{x.label}</div>
-            <div className="text-[9.5px] opacity-80">{x.sub}</div>
+          <button key={x.id} onClick={() => set({ mol: x.id })} className={chip(mol === x.id)}>
+            <div className="text-[12px]">{x.label}</div>
+            <div className="text-[9.5px] opacity-70">{x.sub}</div>
           </button>
         ))}
       </div>
-      <p className="mt-2 text-[11.5px] leading-snug text-ink/80">{m.hint}</p>
-      <div className="mt-2 flex items-center gap-2 text-[10.5px] text-faint">
-        <span className="h-2 w-6 rounded-sm" style={{ background: 'linear-gradient(90deg,#5aaaff,#0e182c)' }} /> less absorbing
-        <span className="ml-auto h-2 w-6 rounded-sm" style={{ background: 'linear-gradient(90deg,#2c1a0c,#ffb547)' }} /> absorbs
-      </div>
-      <label className="mt-3 flex cursor-pointer items-center justify-between text-[12px] text-muted">
+      <p className="mt-2 text-[11.5px] leading-snug text-muted">{m.hint}</p>
+      <p className="mt-1 text-[10.5px] text-faint">bright = absorbs · dark = less absorbing</p>
+      <label className="mt-3 flex cursor-pointer items-center justify-between text-[11.5px] text-muted">
         <span>Show each survey separately</span>
-        <input type="checkbox" checked={per} onChange={(e) => set({ molPerSurvey: e.target.checked })} className="accent-amber" />
+        <input type="checkbox" checked={per} onChange={(e) => set({ molPerSurvey: e.target.checked })} className="accent-neutral-300" />
       </label>
     </div>
   )
@@ -119,18 +105,18 @@ function StackControls() {
         <div key={k}>
           <div className="mb-1 flex justify-between text-[11px] text-muted">
             <span>{k === 'ra' ? 'Motion east (μα*)' : 'Motion north (μδ)'}</span>
-            <span className="font-mono">{pm[k] >= 0 ? '+' : ''}{pm[k].toFixed(1)}″/yr</span>
+            <span>{pm[k] >= 0 ? '+' : ''}{pm[k].toFixed(1)}″/yr</span>
           </div>
           <Slider label={k} value={pm[k]} min={-12} max={12} step={0.1} onChange={(v) => set({ stackPm: { ...pm, [k]: v } })} />
         </div>
       ))}
-      <div className="flex gap-1.5">
+      <div className="flex gap-1">
         <button disabled={!cat} onClick={() => cat && set({ stackPm: cat })}
-          className="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-cyan/30 bg-cyan/[0.06] py-1.5 text-[11.5px] text-cyan transition hover:bg-cyan/10 disabled:cursor-not-allowed disabled:opacity-40">
-          <Navigation className="h-3.5 w-3.5" /> Use catalogue motion
+          className="flex-1 border border-line py-1.5 text-[11.5px] text-ink hover:border-line-2 disabled:cursor-not-allowed disabled:opacity-30">
+          Use catalogue motion
         </button>
-        <button onClick={() => set({ stackPm: { ra: 0, dec: 0 } })} className="grid w-9 place-items-center rounded-md border border-line text-muted hover:text-ink" title="Reset to zero motion">
-          <RotateCcw className="h-3.5 w-3.5" />
+        <button onClick={() => set({ stackPm: { ra: 0, dec: 0 } })} className="border border-line px-3 text-[11.5px] text-muted hover:text-ink" title="Reset to zero motion">
+          Reset
         </button>
       </div>
     </div>
@@ -146,31 +132,31 @@ function OverlayControls() {
   if (!job) return null
   const data = ov && typeof ov === 'object' ? ov : null
   const dark = data?.detections.filter((d) => !d.gaia) ?? []
-  const Toggle = ({ on, onClick, color, label, count, tip }: { on: boolean; onClick: () => void; color: string; label: string; count?: number | string; tip: string }) => (
+  const Toggle = ({ on, onClick, mark, label, count, tip }: { on: boolean; onClick: () => void; mark: string; label: string; count?: number | string; tip: string }) => (
     <Tip label={tip}>
-      <button onClick={onClick} className={clsx('flex w-full items-center gap-2.5 rounded-md border px-2.5 py-1.5 text-left text-[12.5px] transition',
-        on ? 'border-line-2 bg-panel-2 text-ink' : 'border-line text-muted hover:text-ink')}>
-        <span className="h-3 w-3 rounded-full border-2" style={{ borderColor: color, opacity: on ? 1 : 0.35 }} />
+      <button onClick={onClick} className={clsx('flex w-full items-center gap-2.5 border px-2.5 py-1.5 text-left text-[12px]',
+        on ? 'border-line-2 text-ink' : 'border-line text-faint hover:text-muted')}>
+        <span className="w-3 text-center">{on ? mark : '·'}</span>
         <span className="flex-1">{label}</span>
-        <span className="font-mono text-[11px] text-faint">{count ?? ''}</span>
+        <span className="text-[11px] text-faint">{count ?? ''}</span>
       </button>
     </Tip>
   )
   return (
     <Section title="Overlays">
-      <div className="space-y-1.5">
-        <Toggle on={showGaia} onClick={() => set({ showGaia: !showGaia })} color="#6ee7f9" label="Gaia DR3 stars"
+      <div className="space-y-1">
+        <Toggle on={showGaia} onClick={() => set({ showGaia: !showGaia })} mark="○" label="Gaia DR3 stars"
           count={ov === 'loading' ? '…' : data ? data.gaia.filter((g) => g.g <= 18.5).length : '—'}
           tip="Stars catalogued by ESA’s Gaia, drawn where they should be on each survey date (their motion is applied)." />
-        <Toggle on={showDark} onClick={() => set({ showDark: !showDark })} color="#ff6b81" label="Not in Gaia"
+        <Toggle on={showDark} onClick={() => set({ showDark: !showDark })} mark="◇" label="Not in Gaia"
           count={ov === 'loading' ? '…' : data ? dark.length : '—'}
           tip="SPHEREx sources with no Gaia counterpart: too red or cold for Gaia (brown dwarfs!), dust-hidden, or galaxies. Worth a look." />
       </div>
       {showDark && dark.length > 0 && (
-        <div className="mt-2 space-y-1">
+        <div className="mt-1.5">
           {dark.slice(0, 6).map((d, i) => (
             <button key={i} onClick={() => set({ pick: { px: d.px, py: d.py, ra: d.ra, dec: d.dec }, inspectorOpen: true })}
-              className="flex w-full items-center justify-between rounded px-2 py-1 font-mono text-[11px] text-muted transition hover:bg-panel-2 hover:text-ink">
+              className="flex w-full items-center justify-between px-2.5 py-1 text-[11px] text-muted hover:bg-panel-2 hover:text-ink">
               <span>◇ candidate {i + 1}</span><span>{d.snr.toFixed(0)}σ</span>
             </button>
           ))}

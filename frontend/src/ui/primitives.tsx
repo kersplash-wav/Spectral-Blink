@@ -1,6 +1,5 @@
 import * as RSlider from '@radix-ui/react-slider'
 import * as RTooltip from '@radix-ui/react-tooltip'
-import { motion } from 'motion/react'
 import clsx from 'clsx'
 import type { ReactNode } from 'react'
 
@@ -8,7 +7,7 @@ export function Section({ title, right, children }: { title: string; right?: Rea
   return (
     <section className="border-b border-line px-4 py-4">
       <div className="mb-2.5 flex items-center justify-between">
-        <h3 className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-faint">{title}</h3>
+        <h3 className="text-[11px] text-faint">{title.toLowerCase()}</h3>
         {right}
       </div>
       {children}
@@ -35,15 +34,12 @@ export function Segmented<T extends string>({ value, options, onChange, id }: {
   options: { value: T; label: ReactNode; title?: string; disabled?: boolean }[]
 }) {
   return (
-    <div className="relative flex rounded-lg border border-line bg-panel-2 p-0.5">
+    <div className="relative flex border border-line">
       {options.map((o) => (
         <button key={o.value} title={o.title} disabled={o.disabled} onClick={() => onChange(o.value)}
-          className={clsx('relative z-10 flex-1 rounded-md px-2 py-1.5 text-[12.5px] font-medium transition-colors',
+          className={clsx('relative z-10 flex-1 px-2 py-1.5 text-[11.5px]',
             value === o.value ? 'text-void' : 'text-muted hover:text-ink', o.disabled && 'cursor-not-allowed opacity-40')}>
-          {value === o.value && (
-            <motion.span layoutId={`seg-${id}`} className="absolute inset-0 -z-10 rounded-md bg-amber"
-              transition={{ type: 'spring', stiffness: 500, damping: 38 }} />
-          )}
+          {value === o.value && <span data-seg={id} className="absolute inset-0 -z-10 bg-accent" />}
           {o.label}
         </button>
       ))}
@@ -57,7 +53,7 @@ export function Tip({ label, children }: { label: ReactNode; children: ReactNode
       <RTooltip.Trigger asChild>{children}</RTooltip.Trigger>
       <RTooltip.Portal>
         <RTooltip.Content sideOffset={6}
-          className="z-50 max-w-60 rounded-md border border-line-2 bg-panel-2 px-2.5 py-1.5 text-[12px] text-ink shadow-xl">
+          className="z-50 max-w-60 border border-line-2 bg-panel px-2.5 py-1.5 text-[11.5px] text-ink">
           {label}
         </RTooltip.Content>
       </RTooltip.Portal>
@@ -66,5 +62,5 @@ export function Tip({ label, children }: { label: ReactNode; children: ReactNode
 }
 
 export function Kbd({ children }: { children: ReactNode }) {
-  return <kbd className="rounded border border-line-2 bg-panel-2 px-1.5 py-0.5 font-mono text-[10.5px] text-muted">{children}</kbd>
+  return <kbd className="border border-line-2 px-1.5 py-0.5 text-[10.5px] text-muted">{children}</kbd>
 }
